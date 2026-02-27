@@ -6,7 +6,11 @@
   },
   "routes": [
     {
-      "src": "/(.*)",
+      "src": "/fonts/(.*)",
+      "dest": "/fonts/$1"
+    },
+    {
+      "src": "/api/(.*)",
       "dest": "/api/index.php"
     }
   ]

@@ -1,0 +1,46 @@
+@font-face {
+  font-family: "IoskeleyMono";
+  src: url("/fonts/IoskeleyMono-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IoskeleyMono";
+  src: url("/fonts/IoskeleyMono-Italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IoskeleyMono";
+  src: url("/fonts/IoskeleyMono-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IoskeleyMono";
+  src: url("/fonts/IoskeleyMono-BoldItalic.woff2") format("woff2");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+body {
+  font-family: "IoskeleyMono", monospace;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 2rem 1rem 0;
+}
+
+a {
+  color: #0000ee;
+}
+
+pre {
+  overflow-x: auto;
+}
