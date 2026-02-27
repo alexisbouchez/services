@@ -66,7 +66,35 @@ if (!empty($emails)) {
     exit;
 }
 
-// Step 3: Search commits authored by this user across all repos (newest and oldest).
+// Step 3: Fetch recent commits directly from the user's repos.
+$repos = github_get("https://api.github.com/users/{$username}/repos?sort=pushed&per_page=10");
+
+if (is_array($repos)) {
+    foreach ($repos as $repo) {
+        if ($repo['fork'] ?? false) {
+            continue;
+        }
+        $commits = github_get("https://api.github.com/repos/{$username}/{$repo['name']}/commits?per_page=5");
+        if (is_array($commits)) {
+            foreach ($commits as $c) {
+                $email = $c['commit']['author']['email'] ?? '';
+                if (is_real_email($email)) {
+                    $emails[$email] = true;
+                }
+            }
+        }
+        if (!empty($emails)) {
+            break;
+        }
+    }
+}
+
+if (!empty($emails)) {
+    echo json_encode(['username' => $username, 'emails' => array_keys($emails)]);
+    exit;
+}
+
+// Step 4: Search commits authored by this user across all repos (newest and oldest).
 foreach (['desc', 'asc'] as $order) {
     $search = github_get("https://api.github.com/search/commits?q=author:{$username}&sort=author-date&order={$order}&per_page=30");
 
