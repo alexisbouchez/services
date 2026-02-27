@@ -66,15 +66,21 @@ if (!empty($emails)) {
     exit;
 }
 
-// Step 3: Search commits authored by this user across all repos.
-$search = github_get("https://api.github.com/search/commits?q=author:{$username}&sort=author-date&order=asc&per_page=30");
+// Step 3: Search commits authored by this user across all repos (newest and oldest).
+foreach (['desc', 'asc'] as $order) {
+    $search = github_get("https://api.github.com/search/commits?q=author:{$username}&sort=author-date&order={$order}&per_page=30");
 
-if (is_array($search) && isset($search['items'])) {
-    foreach ($search['items'] as $item) {
-        $email = $item['commit']['author']['email'] ?? '';
-        if (is_real_email($email)) {
-            $emails[$email] = true;
+    if (is_array($search) && isset($search['items'])) {
+        foreach ($search['items'] as $item) {
+            $email = $item['commit']['author']['email'] ?? '';
+            if (is_real_email($email)) {
+                $emails[$email] = true;
+            }
         }
+    }
+
+    if (!empty($emails)) {
+        break;
     }
 }
 
