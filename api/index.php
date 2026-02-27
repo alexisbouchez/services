@@ -38,10 +38,14 @@ if (!empty($profile['email'])) {
     exit;
 }
 
+$emails = [];
+
+function is_real_email(string $email): bool {
+    return $email !== '' && !str_contains($email, 'noreply') && !str_contains($email, '@users.');
+}
+
 // Step 2: Scan public events for commit emails.
 $events = github_get("https://api.github.com/users/{$username}/events/public?per_page=100");
-
-$emails = [];
 
 if (is_array($events)) {
     foreach ($events as $event) {
@@ -50,9 +54,26 @@ if (is_array($events)) {
         }
         foreach ($event['payload']['commits'] ?? [] as $commit) {
             $email = $commit['author']['email'] ?? '';
-            if ($email !== '' && !str_contains($email, 'noreply') && !str_contains($email, '@users.')) {
+            if (is_real_email($email)) {
                 $emails[$email] = true;
             }
+        }
+    }
+}
+
+if (!empty($emails)) {
+    echo json_encode(['username' => $username, 'emails' => array_keys($emails)]);
+    exit;
+}
+
+// Step 3: Search commits authored by this user across all repos.
+$search = github_get("https://api.github.com/search/commits?q=author:{$username}&sort=author-date&order=asc&per_page=30");
+
+if (is_array($search) && isset($search['items'])) {
+    foreach ($search['items'] as $item) {
+        $email = $item['commit']['author']['email'] ?? '';
+        if (is_real_email($email)) {
+            $emails[$email] = true;
         }
     }
 }
