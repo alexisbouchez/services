@@ -12,6 +12,10 @@
     {
       "src": "/api/(.*)",
       "dest": "/api/index.php"
+    },
+    {
+      "src": "/github-email-finder",
+      "dest": "/github-email-finder/index.html"
     }
   ]
 }

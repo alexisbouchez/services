@@ -2,71 +2,17 @@
 <html lang="en">
 
 <head>
-  <title>GitHub Email Finder</title>
+  <title>Services</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="/fonts/fonts.css" />
-  <style>
-    input, button {
-      font-family: inherit;
-      font-size: inherit;
-      padding: 0.4rem 0.6rem;
-    }
-
-    #result {
-      margin-top: 1.5rem;
-    }
-
-    .error {
-      color: red;
-    }
-  </style>
 </head>
 
 <body>
-  <h1>GitHub Email Finder</h1>
-  <p>Enter a GitHub username to find their public email address.</p>
-
-  <form id="form">
-    <input type="text" id="username" placeholder="username" required />
-    <button type="submit">Find</button>
-  </form>
-
-  <div id="result"></div>
-
-  <script>
-    const form = document.getElementById('form');
-    const input = document.getElementById('username');
-    const result = document.getElementById('result');
-
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const username = input.value.trim();
-      if (!username) return;
-
-      result.textContent = 'Searching...';
-
-      try {
-        const res = await fetch(`/api?username=${encodeURIComponent(username)}`);
-        const data = await res.json();
-
-        if (data.error) {
-          result.innerHTML = `<p class="error">${data.error}</p>`;
-          return;
-        }
-
-        if (data.emails.length === 0) {
-          result.innerHTML = `<p>No email found for <strong>${data.username}</strong>.</p>`;
-          return;
-        }
-
-        const list = data.emails.map(email => `<li><a href="mailto:${email}">${email}</a></li>`).join('');
-        result.innerHTML = `<p>Email(s) for <strong>${data.username}</strong>:</p><ul>${list}</ul>`;
-      } catch (err) {
-        result.innerHTML = `<p class="error">Something went wrong. Try again.</p>`;
-      }
-    });
-  </script>
+  <h1>Services</h1>
+  <ul>
+    <li><a href="/github-email-finder">GitHub Email Finder</a></li>
+  </ul>
 </body>
 
 </html>
